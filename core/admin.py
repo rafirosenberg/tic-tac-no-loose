@@ -1,3 +1,7 @@
 from django.contrib import admin
+from core.models import Game
 
-# Register your models here.
+#class GameAdmin(admin.ModelAdmin):
+    #exclude = ('board', 'last_move')
+
+admin.site.register(Game)

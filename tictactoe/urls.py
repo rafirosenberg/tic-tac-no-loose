@@ -3,13 +3,13 @@ from django.conf.urls import patterns, include, url
 from django.contrib import admin
 admin.autodiscover()
 
-from core.views import create_move, view_game,
+from core.views import view_game, create_move
 
 urlpatterns = patterns('',
-    url(r'^create_move/(?P<game_id>\d+)/$', 
-        'tictactoe.views.create_move', name='create_move'),
     url(r'^view_game/(?P<game_id>\d+)/$',
-        'tictactoe.views.view_game', name='view_game'),
-
+        view_game, name='view_game'),
+    url(
+        r'^create_move/(?P<game_id>\d+)/$',
+        view=create_move, name='create_move'),
     url(r'^admin/', include(admin.site.urls)),
 )
