@@ -1,0 +1,54 @@
+<html>
+    <head>
+        <title>TicTacToe</title>
+        <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}style.css" />
+        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.5.1/jquery.min.js" ></script>
+        <script type="text/javascript" src="{{ STATIC_URL }}django.js"></script>
+
+    </head>
+    <body>
+
+    <script type="text/javascript">
+        var player = "{{ player }}";
+        var game_id = {{ game_id }};
+        var game_over = {{ game_over|lower }};
+        var create_url = "{% url 'create_move' game_id %}";
+        function MakeMove(sender, move) {
+        if (game_over === false){
+        if ($(sender).text().trim() == "") {
+        $(sender).html(player);
+        $.post(create_url, {'move': move},
+            function(data) {
+                // successfully made a move
+                location.reload()
+            }
+        )
+    }}
+}
+    </script>
+<div id="wrapper">
+    <div id="messages">
+        {% if winner == None %}
+         Your Turn
+        {% else %}
+            {% if winner == "" %}
+                Its a tie!
+            {% else %}
+                {{ winner }} wins!
+            {% endif %}
+        {% endif %}
+    </div>
+    <div id='board'>
+    {% for row in board %}
+        <div class="cell" id="cell{{ forloop.counter0 }}" onclick="MakeMove(this, '{{ forloop.counter0 }}')">
+            {{ row }}
+        </div>
+        {% if forloop.counter|divisibleby:3 %}
+            <br class="clear" />
+        {% endif %}
+    {% endfor %}
+    </div>
+    <a class="fancy_button" href="/view_game/{{game.id|add:'1'}}">New Game</a>
+</div>
+    </body>
+</html>
