@@ -91,32 +91,48 @@ class Game(models.Model):
         if not move:
             #force a move in this special case
             if board == {0:'',1:'',2:'X',
-                        3:'',4:'O',5:'',
-                        6:'X',7:'',8:''}:
+                         3:'',4:'O',5:'',
+                         6:'X',7:'',8:''}:
                 move = 1
         if not move:
             #force a move in this special case
-            if board == {0:'',1:'X',2:'',
-                        3:'X',4:'O',5:'',
-                        6:'',7:'',8:''}:
+            if board in ({0:'',1:'X',2:'',
+                          3:'X',4:'O',5:'',
+                          6:'',7:'',8:''},
+
+                          {0:'',1:'X',2:'',
+                           3:'',4:'O',5:'',
+                           6:'X',7:'',8:''}):
                 move = 0
         if not move:
             #force a move in this special case
-            if board == {0:'',1:'X',2:'',
-                        3:'',4:'O',5:'X',
-                        6:'X',7:'',8:''}:
+            if board in ({0:'',1:'X',2:'',
+                         3:'',4:'O',5:'X',
+                         6:'',7:'',8:''},
+                        
+                         {0:'',1:'X',2:'',
+                          3:'',4:'O',5:'',
+                          6:'',7:'',8:'X'}):
                 move = 2
         if not move:
             #force a move in this special case
-            if board == {0:'',1:'',2:'',
+            if board in ({0:'',1:'',2:'',
                         3:'X',4:'O',5:'',
-                        6:'',7:'X',8:''}:
+                        6:'',7:'X',8:''},
+                        
+                        {0:'X',1:'',2:'',
+                        3:'',4:'O',5:'',
+                        6:'',7:'X',8:''}):
                 move = 6
         if not move:
             #force a move in this special case
-            if board == {0:'',1:'',2:'',
+            if board in ({0:'',1:'',2:'',
                         3:'',4:'O',5:'X',
-                        6:'',7:'X',8:''}:
+                        6:'',7:'X',8:''},
+                        
+                        {0:'',1:'',2:'X',
+                        3:'',4:'O',5:'',
+                        6:'',7:'X',8:''}):
                 move = 8
         if not move:
             # get center
