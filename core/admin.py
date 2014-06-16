@@ -1,7 +1,7 @@
 from django.contrib import admin
 from core.models import Game
 
-#class GameAdmin(admin.ModelAdmin):
-    #exclude = ('board', 'last_move')
+class GameAdmin(admin.ModelAdmin):
+    exclude = ('board',)
 
-admin.site.register(Game)
+admin.site.register(Game, GameAdmin)

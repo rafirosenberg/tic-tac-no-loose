@@ -4,15 +4,18 @@ import pickle
 
 
 class Game(models.Model):
-    player = models.ForeignKey(User)
+    user = 'X'
     computer = 'O'
     board = models.CharField(max_length=100,
-                             default=pickle.dumps(['']*9))
-    winning_rows = [[0, 1, 2],  [3, 4, 5],  [6, 7, 8],  # horizontal
-                    [0, 3, 6],  [1, 4, 7],  [2, 5, 8],  # vertical
-                    [0, 4, 8],  [2, 4, 6]]  # diagonal
+                             default=pickle.dumps({0:'',1:'',2:'',
+                                                   3:'',4:'',5:'',
+                                                   6:'',7:'',8:''}))
+
+    winning_rows = ((0, 1, 2),  (3, 4, 5),  (6, 7, 8),  # horizontal
+                    (0, 3, 6),  (1, 4, 7),  (2, 5, 8),  # vertical
+                    (0, 4, 8),  (2, 4, 6))  # diagonal
+
     corners = [0, 2, 6, 8]
-    center = 4
 
     def get_board(self):
         return pickle.loads(str(self.board))
@@ -62,27 +65,70 @@ class Game(models.Model):
         Choose defensive moves for computer.
         """
         board = self.get_board()
-        if self.get_winner() is not None:
-            return('youfailed!')
-        else:
+        #go for the win
+        for row in self.winning_rows:
+            trouble = [board[pos] for pos in row]
+            if trouble.count('O') == 2:
+                if trouble.count('X') == 0:
+                    move = row[trouble.index('')]
+                    break
+            else:
+                move = None
+        if not move:
+            #check for need to defend
             for row in self.winning_rows:
                 trouble = [board[pos] for pos in row]
-                if trouble.count(self.player.username) == 2:
-                    if trouble.count('O') < 1:
-                        move = trouble.index('')
+                if trouble.count('X') == 2:
+                    if trouble.count('O') == 0:
+                        move = row[trouble.index('')]
                         break
-                else:
-                    # get center
-                    if board[4] == '':
-                        move = 4
-                        break
-                    # get a corner
-                    else:
-                        if len([m for m in self.corners if m in self.get_valid_moves()]) > 0:
-                            move = [m for m in self.corners if m in self.get_valid_moves()][0]
-                            break
-                        else:
-                            move = self.get_valid_moves()[0]
-                            break
-            self.make_move(self.computer, move)
-            return(move)
+        if not move:
+            #force a move in this special case
+            if board == {0:'X',1:'',2:'',
+                        3:'',4:'O',5:'',
+                        6:'',7:'',8:'X'}:
+                move = 1
+        if not move:
+            #force a move in this special case
+            if board == {0:'',1:'',2:'X',
+                        3:'',4:'O',5:'',
+                        6:'X',7:'',8:''}:
+                move = 1
+        if not move:
+            #force a move in this special case
+            if board == {0:'',1:'X',2:'',
+                        3:'X',4:'O',5:'',
+                        6:'',7:'',8:''}:
+                move = 0
+        if not move:
+            #force a move in this special case
+            if board == {0:'',1:'X',2:'',
+                        3:'',4:'O',5:'X',
+                        6:'X',7:'',8:''}:
+                move = 2
+        if not move:
+            #force a move in this special case
+            if board == {0:'',1:'',2:'',
+                        3:'X',4:'O',5:'',
+                        6:'',7:'X',8:''}:
+                move = 6
+        if not move:
+            #force a move in this special case
+            if board == {0:'',1:'',2:'',
+                        3:'',4:'O',5:'X',
+                        6:'',7:'X',8:''}:
+                move = 8
+        if not move:
+            # get center
+            if 4 in (self.get_valid_moves()):
+                move = 4
+        if not move:            
+            # get a corner
+            if len([m for m in self.corners if m in self.get_valid_moves()]) > 0:
+                move = [m for m in self.corners if m in self.get_valid_moves()][0]
+            #choose from what is left
+            else:
+                move = self.get_valid_moves()[0]
+        self.make_move(self.computer, move)
+        return(move)
+
