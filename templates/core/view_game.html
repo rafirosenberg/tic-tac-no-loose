@@ -13,6 +13,7 @@
         var game_id = {{ game_id }};
         var game_over = {{ game_over|lower }};
         var create_url = "{% url 'create_move' game_id %}";
+        var game_url = "{% url 'view_game' game_id %}";
         function MakeMove(sender, move) {
         if (game_over === false){
         if ($(sender).text().trim() == "") {
@@ -20,7 +21,7 @@
         $.post(create_url, {'move': move},
             function(data) {
                 // successfully made a move
-                location.reload()
+                location = game_url
             }
         )
     }}
@@ -48,7 +49,7 @@
         {% endif %}
     {% endfor %}
     </div>
-    <a class="fancy_button" href="/view_game/{{game.id|add:'1'}}">New Game</a>
+    <a class="fancy_button" href="/new_game">New Game</a>
 </div>
     </body>
 </html>

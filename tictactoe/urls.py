@@ -6,7 +6,9 @@ admin.autodiscover()
 from core.views import new_game, view_game, create_move
 
 urlpatterns = patterns('',
-    url(r'^new_game/(?P<game_id>\d+)/$',
+    url(r'^$',
+        new_game, name='home'),
+    url(r'^new_game$',
         new_game, name='new_game'),
     url(r'^view_game/(?P<game_id>\d+)/$',
         view_game, name='view_game'),
