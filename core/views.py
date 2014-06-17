@@ -3,25 +3,25 @@ from django.http import HttpResponse
 
 from core.models import Game
 
+
 def create_move(request, game_id):
     game = Game.objects.get(pk=game_id)
     move = int(request.POST['move'])
     game.make_move('X', move)
     winner = game.get_winner()
-    board=game.get_board()
+    board = game.get_board()
     if winner == None:
         d = game.defend()
         winner = game.get_winner()
-        board=game.get_board()
-        context = { "game_id": game_id,
-                'board': board.values(),
-                'game': game,
-                'player': 'X',
-                'winner': winner,
-                'game_over': False if winner is None else True
-               }
+        board = game.get_board()
+        context = {"game_id": game_id,
+                   'board': board.values(),
+                   'game': game,
+                   'player': 'X',
+                   'winner': winner,
+                   'game_over': False if winner is None else True
+                   }
     return render(request, 'core/view_game.html', context)
-    
 
 
 def view_game(request, game_id):
@@ -31,14 +31,15 @@ def view_game(request, game_id):
     game = Game.objects.get(pk=game_id)
     board = game.get_board()
     winner = game.get_winner()
-    context = { "game_id": game_id,
-                'board': board.values(),
-                'game': game,
-                'player': 'X',
-                'winner': winner,
-                'game_over': False if winner is None else True
+    context = {"game_id": game_id,
+               'board': board.values(),
+               'game': game,
+               'player': 'X',
+               'winner': winner,
+               'game_over': False if winner is None else True
                }
     return render(request, 'core/view_game.html', context)
+
 
 def new_game(request):
     """

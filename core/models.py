@@ -2,14 +2,16 @@ from django.db import models
 from django.contrib.auth.models import User
 import pickle
 
+# based on https://github.com/sontek-archive/django-tictactoe
+
 
 class Game(models.Model):
     user = 'X'
     computer = 'O'
     board = models.CharField(max_length=100,
-                             default=pickle.dumps({0:'',1:'',2:'',
-                                                   3:'',4:'',5:'',
-                                                   6:'',7:'',8:''}))
+                             default=pickle.dumps({0: '', 1: '', 2: '',
+                                                   3: '', 4: '', 5: '',
+                                                   6: '', 7: '', 8: ''}))
 
     winning_rows = ((0, 1, 2),  (3, 4, 5),  (6, 7, 8),  # horizontal
                     (0, 3, 6),  (1, 4, 7),  (2, 5, 8),  # vertical
@@ -59,6 +61,7 @@ class Game(models.Model):
 
         #game not over
         return None
+#end Based on https://github.com/sontek-archive/django-tictactoe ------------
 
     def defend(self):
         """
@@ -84,78 +87,79 @@ class Game(models.Model):
                         break
         if not move:
             #force a move in this special case
-            if board == {0:'X',1:'',2:'',
-                        3:'',4:'O',5:'',
-                        6:'',7:'',8:'X'}:
+            if board == {0: 'X', 1: '', 2: '',
+                         3: '', 4: 'O', 5: '',
+                         6: '', 7: '', 8: 'X'}:
                 move = 1
         if not move:
             #force a move in this special case
-            if board == {0:'',1:'',2:'X',
-                         3:'',4:'O',5:'',
-                         6:'X',7:'',8:''}:
+            if board == {0: '', 1: '', 2: 'X',
+                         3: '', 4: 'O', 5: '',
+                         6: 'X', 7: '', 8: ''}:
                 move = 1
         if not move:
             #force a move in this special case
-            if board in ({0:'',1:'X',2:'',
-                          3:'X',4:'O',5:'',
-                          6:'',7:'',8:''},
+            if board in ({0: '', 1: 'X', 2: '',
+                          3: 'X', 4: 'O', 5: '',
+                          6: '', 7: '', 8: ''},
 
-                          {0:'',1:'',2:'X',
-                           3:'X',4:'O',5:'',
-                           6:'',7:'',8:''},
+                         {0: '', 1: '', 2: 'X',
+                          3: 'X', 4: 'O', 5: '',
+                          6: '', 7: '', 8: ''},
 
-                          {0:'',1:'X',2:'',
-                           3:'',4:'O',5:'',
-                           6:'X',7:'',8:''}):
+                         {0: '', 1: 'X', 2: '',
+                          3: '', 4: 'O', 5: '',
+                          6: 'X', 7: '', 8: ''}):
                 move = 0
         if not move:
-            #force a move in this special case ... this set is actually extra as 
-            #it would naturally grab this corner but im leaving it in for now
-            if board in ({0:'',1:'X',2:'',
-                         3:'',4:'O',5:'X',
-                         6:'',7:'',8:''},
+            #force a move in this special case ... this set is actually extra
+            #as it would naturally grab this corner
+            #but im leaving it in for now
+            if board in ({0: '', 1: 'X', 2: '',
+                          3: '', 4: 'O', 5: 'X',
+                          6: '', 7: '', 8: ''},
 
-                         {0:'X',1:'',2:'',
-                          3:'',4:'O',5:'X',
-                          6:'',7:'',8:''},
-                        
-                         {0:'',1:'X',2:'',
-                          3:'',4:'O',5:'',
-                          6:'',7:'',8:'X'}):
+                         {0: 'X', 1: '', 2: '',
+                          3: '', 4: 'O', 5: 'X',
+                          6: '', 7: '', 8: ''},
+
+                         {0: '', 1: 'X', 2: '',
+                          3: '', 4: 'O', 5: '',
+                          6: '', 7: '', 8: 'X'}):
                 move = 2
         if not move:
             #force a move in this special case
-            if board in ({0:'',1:'',2:'',
-                        3:'X',4:'O',5:'',
-                        6:'',7:'X',8:''},
+            if board in ({0: '', 1: '', 2: '',
+                          3: 'X', 4: 'O', 5: '',
+                          6: '', 7: 'X', 8: ''},
 
-                        {0:'',1:'',2:'',
-                        3:'X',4:'O',5:'',
-                        6:'',7:'',8:'X'},
-                        
-                        {0:'X',1:'',2:'',
-                        3:'',4:'O',5:'',
-                        6:'',7:'X',8:''}):
+                         {0: '', 1: '', 2: '',
+                          3: 'X', 4: 'O', 5: '',
+                          6: '', 7: '', 8: 'X'},
+
+                         {0: 'X', 1: '', 2: '',
+                          3: '', 4: 'O', 5: '',
+                          6: '', 7: 'X', 8: ''}):
                 move = 6
         if not move:
             #force a move in this special case
-            if board in ({0:'',1:'',2:'',
-                        3:'',4:'O',5:'X',
-                        6:'',7:'X',8:''},
-                        
-                        {0:'',1:'',2:'',
-                        3:'',4:'O',5:'X',
-                        6:'X',7:'',8:''},                        
+            if board in ({0: '', 1: '', 2: '',
+                          3: '', 4: 'O', 5: 'X',
+                          6: '', 7: 'X', 8: ''},
 
-                        {0:'',1:'',2:'X',
-                        3:'',4:'O',5:'',
-                        6:'',7:'X',8:''}):
+                         {0: '', 1: '', 2: '',
+                          3: '', 4: 'O', 5: 'X',
+                          6: 'X', 7: '', 8: ''},
+
+                         {0: '', 1: '', 2: 'X',
+                          3: '', 4: 'O', 5: '',
+                          6: '', 7: 'X', 8: ''}):
                 move = 8
         if not move:
             # get center
             if 4 in (self.get_valid_moves()):
                 move = 4
-        if not move:            
+        if not move:
             # get a corner
             if len([m for m in self.corners if m in self.get_valid_moves()]) > 0:
                 move = [m for m in self.corners if m in self.get_valid_moves()][0]
@@ -164,4 +168,3 @@ class Game(models.Model):
                 move = self.get_valid_moves()[0]
         self.make_move(self.computer, move)
         return(move)
-

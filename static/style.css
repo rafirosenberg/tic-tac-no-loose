@@ -3,6 +3,8 @@
     margin:0 auto;
     text-align: center
 }
+
+/* based on https://github.com/sontek-archive/django-tictactoe */
 #board{
     width: 310px;
     margin:0 auto;
@@ -18,6 +20,7 @@
 .clear {
     clear: both;
 }
+/* end based on https://github.com/sontek-archive/django-tictactoe */
 #messages {font-size: 36px}
 
 .fancy_button {
